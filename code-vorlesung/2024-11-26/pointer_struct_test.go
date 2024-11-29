@@ -15,7 +15,25 @@ func Tick(u *Uhrzeit) {
 
 // Tack zählt die Sekunde um 1 hoch.
 func (u *Uhrzeit) Tack() {
-	u.Sekunde++
+	// u.Sekunde++
+	// if u.Sekunde >= 60 {
+	// 	u.Sekunde = 0
+	// 	u.Minute++
+	// }
+	// if u.Minute >= 60 {
+	// 	u.Minute = 0
+	// 	u.Stunde++
+	// }
+	// if u.Stunde >= 24 {
+	// 	u.Stunde = 0
+	// }
+	// Sekunde inkrementieren
+	u.Sekunde = (u.Sekunde + 1)
+	u.Minute += (u.Sekunde / 60)
+	u.Stunde += (u.Minute / 60)
+	u.Stunde = u.Stunde % 24
+	u.Minute = u.Minute % 60
+	u.Sekunde = u.Sekunde % 60
 }
 
 func Tock(u Uhrzeit) Uhrzeit {
@@ -34,4 +52,23 @@ func ExampleTick() {
 
 	// Output:
 
+}
+
+func ExampleUhrzeit_Tack_overflow() {
+	u1 := Uhrzeit{0, 0, 59}
+	u2 := Uhrzeit{0, 59, 59}
+	u3 := Uhrzeit{23, 59, 59}
+
+	u1.Tack()
+	u2.Tack()
+	u3.Tack()
+
+	fmt.Println(u1)
+	fmt.Println(u2)
+	fmt.Println(u3)
+
+	// Output:
+	// {0 1 0}
+	// {1 0 0}
+	// {0 0 0}
 }
